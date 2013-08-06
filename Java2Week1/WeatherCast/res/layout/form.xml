@@ -1,0 +1,114 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                    android:id="@+id/searchField"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/search_hint"
+                    style="@style/InputText">
+            </EditText>
+
+            <Button
+                    android:id="@+id/searchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_button_text">
+            </Button>
+
+    </LinearLayout>
+
+    <GridLayout
+            android:id="@+id/weatherData"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:columnCount="2"
+            android:padding="10dip">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/description_label"
+                    style="@style/WeatherLabel"/>
+
+            <ImageView
+                    android:id="@+id/data_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:contentDescription="@string/description_image">
+            </ImageView>
+            
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tempf_label"
+                    style="@style/WeatherLabel"/>
+            
+           <TextView
+                    android:id="@+id/data_tempF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeatherResults"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tempc_label"
+                    style="@style/WeatherLabel"/>
+
+            <TextView
+                    android:id="@+id/data_tempC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeatherResults"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/humidity_label"
+                    style="@style/WeatherLabel"/>
+
+            <TextView
+                    android:id="@+id/data_humidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeatherResults"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wind_speed_label"
+                    style="@style/WeatherLabel"/>
+
+            <TextView
+                    android:id="@+id/data_windSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeatherResults"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wind_direction_label"
+                    style="@style/WeatherLabel"/>
+
+            <TextView
+                    android:id="@+id/data_windDirection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeatherResults"/>
+
+    </GridLayout>
+
+
+</LinearLayout>
