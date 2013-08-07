@@ -6,6 +6,7 @@
  * author		Jerry Pennell
  * 
  * date			Jul 22, 2013
+ * update       Aug 06, 2013
  */
 package com.jpennell.Library;
 
@@ -15,9 +16,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 import android.content.Context;
 import android.util.Log;
 
@@ -59,37 +57,7 @@ public class FileSystem {
         return true;
     }
 
-    /**
-     * Store object file.
-     *
-     * @param context the context
-     * @param filename the filename
-     * @param content the content
-     * @param external the external
-     * @return the boolean
-     */
-    @SuppressWarnings("resource")
-	public static Boolean storeObjectFile(Context context, String filename, Object content, Boolean external) {
-        try {
-            File file;
-            FileOutputStream fos;
-            ObjectOutputStream oos;
-            if (external) {
-                file = new File(context.getExternalFilesDir(null), filename);
-                fos = new FileOutputStream(file);
-            } else {
-                fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            }
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(content);
-            oos.close();
-            fos.close();
-        } catch (IOException e) {
-            Log.e("WRITE ERROR", filename);
-        }
-        return true;
-    }
-
+    
     /**
      * Read string file.
      *
@@ -127,48 +95,6 @@ public class FileSystem {
             fin.close();
         } catch (FileNotFoundException e) {
             Log.e("READ ERROR", "FILE NOT FOUND" + filename);
-        } catch (IOException e) {
-            Log.e("READ ERROR", "I/O ERROR");
-        }
-        return content;
-    }
-
-    /**
-     * Read object file.
-     *
-     * @param context the context
-     * @param filename the filename
-     * @param external the external
-     * @return the object
-     */
-    @SuppressWarnings("resource")
-	public static Object readObjectFile(Context context, String filename, Boolean external) {
-        Object content = new Object();
-
-        try {
-            File file;
-            FileInputStream fin;
-
-            if (external) {
-                file = new File(context.getFileStreamPath(null), filename);
-                fin = new FileInputStream(file);
-            } else {
-                file = new File(filename);
-                fin = context.openFileInput(filename);
-            }
-
-            ObjectInputStream ois = new ObjectInputStream(fin);
-
-            try {
-                content = ois.readObject();
-            } catch (ClassNotFoundException e) {
-                Log.e("READ ERROR", "INVALID JAVA OBJECT FILE");
-            }
-            ois.close();
-            fin.close();
-        } catch (FileNotFoundException e) {
-            Log.e("READ ERROR", "FILE NOT FOUND" + filename);
-            return null;
         } catch (IOException e) {
             Log.e("READ ERROR", "I/O ERROR");
         }
