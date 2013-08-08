@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
         // Add Search Handler
         Button searchButton = (Button) findViewById(R.id.searchButton);
 
+
         // Create onClickListener for searchButton
         searchButton.setOnClickListener(new View.OnClickListener() {
 
