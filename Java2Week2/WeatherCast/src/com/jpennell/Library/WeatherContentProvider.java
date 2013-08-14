@@ -1,13 +1,13 @@
 /*
  * project		WeatherCast
  * 
- * package		com.jpennell.Library
+ * package		com.jpennell.library
  * 
  * author		Jerry Pennell
  * 
  * date			Aug 12, 2013
  */
-package com.jpennell.Library;
+package com.jpennell.library;
 	
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -30,7 +30,7 @@ public class WeatherContentProvider extends ContentProvider {
 
     // Authority
     /** The Constant AUTHORITY. */
-    public static final String AUTHORITY = "com.jpennell.Library.WeatherContentProvider	";
+    public static final String AUTHORITY = "com.jpennell.library.weathercontentprovider";
 
     /**
      * The Class WeatherData.

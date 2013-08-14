@@ -4,7 +4,7 @@
     <string name="app_name">WeatherCast</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="search_hint">Enter zip code</string>
+    <string name="search_hint">Enter city or zip code</string>
     <string name="search_button_text">Get Weather</string>
     <string name="tempc_label">Temp(C°):</string>
     <string name="tempf_label">Temp(F°):</string>

@@ -31,18 +31,20 @@ public final class R {
     }
     public static final class id {
         public static final int action_settings=0x7f080009;
-        public static final int data_humidity=0x7f080006;
-        public static final int data_image=0x7f080003;
-        public static final int data_tempC=0x7f080005;
-        public static final int data_tempF=0x7f080004;
-        public static final int data_windDirection=0x7f080008;
-        public static final int data_windSpeed=0x7f080007;
-        public static final int searchButton=0x7f080001;
+        public static final int desc=0x7f080007;
+        public static final int desc_header=0x7f080005;
+        public static final int imageView=0x7f080001;
+        public static final int list=0x7f080004;
+        public static final int searchButton=0x7f080002;
         public static final int searchField=0x7f080000;
-        public static final int weatherData=0x7f080002;
+        public static final int temp=0x7f080008;
+        public static final int temp_header=0x7f080006;
+        public static final int textView=0x7f080003;
     }
     public static final class layout {
         public static final int form=0x7f030000;
+        public static final int list_header=0x7f030001;
+        public static final int list_row=0x7f030002;
     }
     public static final class menu {
         public static final int main=0x7f070000;
@@ -89,7 +91,7 @@ public final class R {
          */
         public static final int AppTheme=0x7f060001;
         public static final int InputText=0x7f060002;
-        public static final int WeatherLabel=0x7f060003;
+        public static final int ListHeader=0x7f060003;
         public static final int WeatherResults=0x7f060004;
     }
 }

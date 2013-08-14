@@ -25,7 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="WeatherService"></service>
+        <provider android:name="com.jpennell.library.WeatherContentProvider" android:authorities="com.jpennell.library.weathercontentprovider" android:exported="true"/>
+        <service android:name="WeatherService"/> 
     </application>
 
 </manifest>

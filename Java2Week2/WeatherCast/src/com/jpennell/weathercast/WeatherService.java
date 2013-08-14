@@ -18,8 +18,10 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-import com.jpennell.Library.FileSystem;
-import com.jpennell.Library.Web;
+
+import com.jpennell.library.Web;
+import com.jpennell.library.FileSystem;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;

@@ -1,14 +1,14 @@
 /*
  * project		WeatherCast
  * 
- * package		com.jpennell.Library
+ * package		com.jpennell.library
  * 
  * author		Jerry Pennell
  * 
  * date			Jul 22, 2013
  * update       Aug 06, 2013
  */
-package com.jpennell.Library;
+package com.jpennell.library;
 
 import java.io.BufferedInputStream;
 import java.io.File;
