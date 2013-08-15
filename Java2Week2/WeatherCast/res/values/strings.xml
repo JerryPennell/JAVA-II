@@ -7,7 +7,7 @@
     <string name="search_hint">Enter city or zip code</string>
     <string name="search_button_text">Get Weather</string>
     <string name="tempc_label">Temp(C°):</string>
-    <string name="tempf_label">Temp(F°):</string>
+    <string name="tempf_label">High Temp(F°):</string>
     <string name="description_label">Current Condition:</string>
     <string name="humidity_label">Humidity:</string>
     <string name="wind_speed_label">Wind Speed(MPH):</string>

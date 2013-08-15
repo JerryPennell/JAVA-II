@@ -18,6 +18,7 @@ import android.util.Log;
  */
 public class StorageParser {
 
+	
 	    public static Integer getDescImage (String descText) {
 	        Log.i("DESCRIPTION", descText);
 

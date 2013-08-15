@@ -1,63 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mybackground"
+    android:orientation="vertical" >
 
     <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/searchField"
+            style="@style/InputText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                    android:id="@+id/searchField"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/search_hint"
-                    style="@style/InputText">
-            </EditText>
-
+            android:layout_weight="1"
+            android:hint="@string/search_hint" >
+        </EditText>
     </LinearLayout>
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dip">
-
-
-        <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:contentDescription="@string/description_image"/>
+    <GridLayout
+        android:id="@+id/GridLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:orientation="vertical"
+        android:paddingTop="10dip" >
 
         <Button
             android:id="@+id/searchButton"
+            style="@style/ButtonText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/search_button_text" />
 
+        <Space
+            android:layout_column="2"
+            android:layout_gravity="fill_vertical"
+            android:layout_row="6" />
+
         <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:textSize="36sp"/>
-    </LinearLayout>
+            android:id="@+id/textView"
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|fill_vertical"
+            android:layout_row="3"
+            android:paddingLeft="20dp"
+            android:textSize="36sp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="57dp"
+            android:layout_column="0"
+            android:layout_gravity="left|fill_vertical"
+            android:layout_row="3"
+            android:contentDescription="@string/description_label"
+            android:paddingLeft="40dp" />
+
+    </GridLayout>
 
     <ListView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:drawSelectorOnTop="false"
-            android:layout_weight="1"
-            android:padding="15dip"
-            style="@style/WeatherResults"/>
+        android:id="@+id/list"
+        style="@style/WeatherResults"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawSelectorOnTop="false"
+        android:padding="15dip" />
 
 </LinearLayout>

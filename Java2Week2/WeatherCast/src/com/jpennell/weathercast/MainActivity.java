@@ -199,7 +199,7 @@ public class MainActivity extends Activity {
 
             // Convert description text with image and set current condition description image
             ((ImageView)findViewById(R.id.imageView)).setImageResource(StorageParser.getDescImage(ccDesc));
-            ((TextView) findViewById(R.id.textView)).setText(ccTemp + " F");
+            ((TextView) findViewById(R.id.textView)).setText(ccTemp + " F¡");
         } catch (JSONException e) {
             e.printStackTrace();
         }
