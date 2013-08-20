@@ -18,20 +18,18 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-
-import com.jpennell.library.Web;
 import com.jpennell.library.FileSystem;
-
+import com.jpennell.library.Web;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class WeatherService.
  */
 public class WeatherService extends IntentService {
-	
     //Global Variables
     /** The final url. */
     URL finalURL = null;
@@ -48,6 +46,7 @@ public class WeatherService extends IntentService {
     public WeatherService() {
         super("WeatherService");
     }
+
 
     /* (non-Javadoc)
      * @see android.app.IntentService#onHandleIntent(android.content.Intent)
@@ -73,7 +72,7 @@ public class WeatherService extends IntentService {
         }
 
         try {
-            finalURL = new URL(baseUrl + "?q=" + qs + "&format=json&key=" + apiKey);
+            finalURL = new URL(baseUrl + "?q=" + qs + "&format=json&num_of_days=5&key=" + apiKey);
             _response = Web.getURLStringResponse(finalURL);
             Log.i("FINAL URL", _response);
 
@@ -100,5 +99,4 @@ public class WeatherService extends IntentService {
             Log.e("onHandleIntent", e.getMessage());
         }
     }
-
 }
