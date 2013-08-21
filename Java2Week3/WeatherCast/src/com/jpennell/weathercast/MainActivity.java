@@ -5,8 +5,7 @@
  * 
  * author		Jerry Pennell
  * 
- * date			Aug 6, 2013
- * updated      Aug 13, 2013
+ * date			Aug 20, 2013
  */
 package com.jpennell.weathercast;
 
@@ -18,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,9 +27,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,21 +38,23 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jpennell.library.Web;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
 import com.jpennell.library.FileSystem;
 import com.jpennell.library.StorageParser;
 import com.jpennell.library.WeatherContentProvider;
+import com.jpennell.library.Web;
+
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class MainActivity.
  */
-@SuppressLint("HandlerLeak")
-public class MainActivity extends Activity {
+public class MainActivity extends SherlockActivity {
 
-	//Global variables
+    //Global variables
     /** The _context. */
-	Context _context;
+    Context _context;
     
     /** The _is connected. */
     Boolean _isConnected = false;
@@ -62,20 +62,15 @@ public class MainActivity extends Activity {
     /** The _list view. */
     ListView _listView;
     
-    /** The Constant IMAGE_VIEW. */
-    static final String IMAGE_VIEW = "imageView";
-    
-    /** The Constant TEXT_VIEW. */
-    static final String TEXT_VIEW = "textView";
-    
-    /** The Constant LIST_VIEW. */
-    static final String LIST_VIEW = "listView";
+    /** The Constant DAY_PICKED_REQUEST. */
+    static final int DAY_PICKED_REQUEST = 1;
 
 
     /**
      * Creates the layout.
      */
-    public void createLayout() {
+    @SuppressLint("HandlerLeak")
+	public void createLayout() {
         // Declare variables
         _context = this;
 
@@ -104,7 +99,7 @@ public class MainActivity extends Activity {
                                 Boolean error = data.has("error");
                                 if (error) {
                                     // Create toast (popup)
-                                    Toast toast = Toast.makeText(_context,"Bad location or zip", Toast.LENGTH_SHORT);
+                                    Toast toast = Toast.makeText(_context,"Invalid location", Toast.LENGTH_SHORT);
                                     toast.show();
                                 } else {
                                     // Get JSON data to determine correct zip code
@@ -116,11 +111,12 @@ public class MainActivity extends Activity {
 
                                     // Query content provider
                                     Cursor cursor = getContentResolver().query(WeatherContentProvider.WeatherData.CONTENT_URI, null, null, null, null);
-                                    // Call display method
-                                    display(cursor);
 
-                                    // Return data from storage and display in UI
-                                    //readAndDisplay();
+                                    // Call displayCurrent method
+                                    displayCurrent();
+
+                                    // Call displayFiveDay method
+                                    displayFiveDay(cursor);
                                 }
                             } catch (JSONException e) {
                                 Log.e("JSON", e.toString());
@@ -142,7 +138,6 @@ public class MainActivity extends Activity {
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             	imm.hideSoftInputFromWindow(field.getWindowToken(), 0);
             }
-            
         });
 
         // Detect Network Connection
@@ -170,14 +165,14 @@ public class MainActivity extends Activity {
             // Disable button
             searchButton.setClickable(false);
         }
+      
     }
 
+
     /**
-     * Display.
-     *
-     * @param cursor the cursor
+     * Display current.
      */
-    public void display(Cursor cursor) {
+    public void displayCurrent() {
         // Display current condition via parsing stored json string
         String readStorage = FileSystem.readStringFile(_context, "temp", false);
 
@@ -199,12 +194,18 @@ public class MainActivity extends Activity {
 
             // Convert description text with image and set current condition description image
             ((ImageView)findViewById(R.id.imageView)).setImageResource(StorageParser.getDescImage(ccDesc));
-            ((TextView) findViewById(R.id.textView)).setText(ccTemp + " F¡");
+            ((TextView) findViewById(R.id.textView)).setText(ccTemp + " F");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
 
-
+    /**
+     * Display five day.
+     *
+     * @param cursor the cursor
+     */
+    public void displayFiveDay(Cursor cursor) {
         // Display weather data via the content provider
         ArrayList<HashMap<String, String>> dataList = new ArrayList<HashMap<String, String>>();
 
@@ -215,21 +216,55 @@ public class MainActivity extends Activity {
                 HashMap<String, String> displayMap = new HashMap<String, String>();
 
                 // Get values for each day
-                displayMap.put("description", cursor.getString(1));
-                displayMap.put("temp", cursor.getString(2));
+                displayMap.put("date", cursor.getString(1));
+                displayMap.put("desc", cursor.getString(2));
+                displayMap.put("hi", cursor.getString(3));
+                displayMap.put("low", cursor.getString(4));
+                displayMap.put("wind", cursor.getString(5));
 
                 cursor.moveToNext();
 
                 dataList.add(displayMap);
-                Log.i("DATA LIST", dataList.toString());
             }
         }
-
-        SimpleAdapter adapter = new SimpleAdapter(_context, dataList, R.layout.list_row, new String[] {"description", "temp"}, new int[] {R.id.desc, R.id.temp});
+        SimpleAdapter adapter = new SimpleAdapter(_context, dataList, R.layout.list_row, new String[] {"desc", "hi", "low"}, new int[] {R.id.desc, R.id.tempLow, R.id.tempHi});
 
         // Set adapter to listView
         _listView.setAdapter(adapter);
+
+        // Call selectDay method to allow the user to click a row
+        selectDay();
     }
+
+
+    /**
+     * Select day.
+     */
+    private void selectDay() {
+        _listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.i("ROW CLICKED", "Row " + i + " clicked");
+
+                @SuppressWarnings("unchecked")
+				HashMap<String, String> detailMap = (HashMap<String, String>) _listView.getItemAtPosition(i);
+
+                Intent detailIntent = new Intent(_context, DetailsActivity.class);
+                // Put extra
+                detailIntent.putExtra("detailDate", detailMap.get("date"));
+                detailIntent.putExtra("detailDesc", detailMap.get("desc"));
+                detailIntent.putExtra("detailHi", detailMap.get("hi"));
+                detailIntent.putExtra("detailLow", detailMap.get("low"));
+                detailIntent.putExtra("detailWind", detailMap.get("wind"));
+
+                Log.i("INTENT", "Works");
+
+                // Start Activity for results
+                startActivityForResult(detailIntent,DAY_PICKED_REQUEST);
+            }
+        });
+    }
+
 
     /* (non-Javadoc)
      * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -237,8 +272,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         // Set content from XML layout
         setContentView(R.layout.form);
@@ -252,12 +285,32 @@ public class MainActivity extends Activity {
 
 
     /* (non-Javadoc)
-     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     * @see com.actionbarsherlock.app.SherlockActivity#onCreateOptionsMenu(android.view.Menu)
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        getSupportMenuInflater().inflate(R.menu.main, menu);
+    return true;
+    }
+
+
+    /* (non-Javadoc)
+     * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == DAY_PICKED_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Bundle result = data.getExtras();
+                if (result != null) {
+                    String date = result.getString("date");
+
+                    Toast toast = Toast.makeText(_context, "You checked the weather for " + date, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        }
     }
 }

@@ -10,13 +10,25 @@
             android:layout_weight="1"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dip"/>
+            android:padding="5dip"
+            style="@style/WeatherResults"/>
 
     <TextView
-            android:id="@+id/temp"
+            android:id="@+id/tempLow"
             android:layout_weight="1"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dip"/>
+            android:gravity="center"
+            android:padding="5dip"
+            style="@style/WeatherResults"/>
+
+    <TextView
+            android:id="@+id/tempHi"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dip"
+            style="@style/WeatherResults"/>
 
 </LinearLayout>

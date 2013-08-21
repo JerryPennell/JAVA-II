@@ -11,16 +11,25 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:paddingLeft="5dip"
-            android:text="@string/description_label"
+            android:text="@string/desc_label"
             style="@style/ListHeader"/>
 
     <TextView
-            android:id="@+id/temp_header"
+            android:id="@+id/tempLow_header"
             android:layout_weight="1"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dip"
-            android:text="@string/tempf_label"
+            android:paddingLeft="5dip"
+            android:text="@string/tempLow_label"
+            style="@style/ListHeader"/>
+
+    <TextView
+            android:id="@+id/tempHi_header"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dip"
+            android:text="@string/tempHi_label"
             style="@style/ListHeader"/>
 
 </LinearLayout>

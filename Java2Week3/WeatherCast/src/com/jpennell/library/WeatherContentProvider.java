@@ -5,10 +5,11 @@
  * 
  * author		Jerry Pennell
  * 
- * date			Aug 12, 2013
+ * date			Aug 19, 2013
  */
 package com.jpennell.library;
-	
+
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -29,7 +30,7 @@ import org.json.JSONObject;
 public class WeatherContentProvider extends ContentProvider {
 
     // Authority
-    /** The Constant AUTHORITY. */
+	 /** The Constant AUTHORITY. */
     public static final String AUTHORITY = "com.jpennell.library.weathercontentprovider";
 
     /**
@@ -47,15 +48,24 @@ public class WeatherContentProvider extends ContentProvider {
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/jpennell.weathercast.item";
 
         // Define Columns
-        /** The Constant DESCRIPTION_COLUMN. */
-        public static final String DESCRIPTION_COLUMN = "description";
+        /** The Constant DATE_COLUMN. */
+        public static final String DATE_COLUMN = "date";
         
-        /** The Constant TEMP_COLUMN. */
-        public static final String TEMP_COLUMN = "temp";
+        /** The Constant DESCRIPTION_COLUMN. */
+        public static final String DESCRIPTION_COLUMN = "desc";
+        
+        /** The Constant HI_COLUMN. */
+        public static final String HI_COLUMN = "hi";
+        
+        /** The Constant LOW_COLUMN. */
+        public static final String LOW_COLUMN = "low";
+        
+        /** The Constant WIND_COLUMN. */
+        public static final String WIND_COLUMN = "wind";
 
         // Define Projection
         /** The Constant PROJECTION. */
-        public static final String[] PROJECTION = {"_Id", DESCRIPTION_COLUMN, TEMP_COLUMN,};
+        public static final String[] PROJECTION = {"_Id", DATE_COLUMN, DESCRIPTION_COLUMN, HI_COLUMN, LOW_COLUMN, WIND_COLUMN};
 
         // Constructor
         /**
@@ -78,6 +88,7 @@ public class WeatherContentProvider extends ContentProvider {
         uriMather.addURI(AUTHORITY, "days/#", ONE_DAY);
     }
 
+
     /* (non-Javadoc)
      * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String, java.lang.String[])
      */
@@ -86,6 +97,7 @@ public class WeatherContentProvider extends ContentProvider {
 
         throw new UnsupportedOperationException();
     }
+
 
     /* (non-Javadoc)
      * @see android.content.ContentProvider#getType(android.net.Uri)
@@ -109,6 +121,7 @@ public class WeatherContentProvider extends ContentProvider {
         return type;
     }
 
+
     /* (non-Javadoc)
      * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
      */
@@ -118,6 +131,7 @@ public class WeatherContentProvider extends ContentProvider {
         throw new UnsupportedOperationException();
     }
 
+
     /* (non-Javadoc)
      * @see android.content.ContentProvider#onCreate()
      */
@@ -126,6 +140,7 @@ public class WeatherContentProvider extends ContentProvider {
 
         return false;
     }
+
 
     /* (non-Javadoc)
      * @see android.content.ContentProvider#query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String)
@@ -159,15 +174,21 @@ public class WeatherContentProvider extends ContentProvider {
                 for (int i = 0; i < fiveDay.length(); i++) {
                     try {
                         JSONObject dayObject = fiveDay.getJSONObject(i);
+                        // Get date
+                        String fiveDayDate = dayObject.getString("date");
                         // Get description
                         String fiveDayDesc = dayObject.getJSONArray("weatherDesc").getJSONObject(0).getString("value");
-                        Log.i("FIVEDAYDESC", fiveDayDesc);
-                        // Get temp
-                        String fiveDayTemp = dayObject.getString("tempMaxF");
-                        Log.i("FIVEDAYTEMP", fiveDayTemp);
+                        // Get temp hi
+                        String fiveDayHi = dayObject.getString("tempMaxF");
+                        // Get temp low
+                        String fiveDayLow = dayObject.getString("tempMinF");
+                        // Get wind speed and direction
+                        String fiveDayWind = dayObject.getString("windspeedMiles") + " " + dayObject.getString("winddir16Point");
+
+                        Log.i("FIVE DAY", fiveDayDate + ", " + fiveDayDesc + ", " + fiveDayHi + ", " + fiveDayLow + ", " + fiveDayWind);
 
                         // Add to MatrixCursor
-                        result.addRow(new Object[] {i + 1, fiveDayDesc, fiveDayTemp});
+                        result.addRow(new Object[] {i + 1, fiveDayDate, fiveDayDesc, fiveDayHi, fiveDayLow, fiveDayWind});
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -191,15 +212,21 @@ public class WeatherContentProvider extends ContentProvider {
 
                 try {
                     JSONObject dayObject = fiveDay.getJSONObject(index - 1);
+                    // Get date
+                    String singleDayDate = dayObject.getString("date");
                     // Get description
-                    String fiveDayDesc = dayObject.getJSONArray("weatherDesc").getJSONObject(0).getString("value");
-                    Log.i("FIVEDAYDESC", fiveDayDesc);
-                    // Get temp
-                    String fiveDayTemp = dayObject.getString("tempMaxF");
-                    Log.i("FIVEDAYTEMP", fiveDayTemp);
+                    String singleDayDesc = dayObject.getJSONArray("weatherDesc").getJSONObject(0).getString("value");
+                    // Get temp hi
+                    String singleDayHi = dayObject.getString("tempMaxF");
+                    // Get temp low
+                    String singleDayLow = dayObject.getString("tempMinF");
+                    // Get wind speed and direction
+                    String singleDayWind = dayObject.getString("windspeedMiles") + " " + dayObject.getString("winddir16Point");
+
+                    Log.i("SINGLE DAY", singleDayDate + ", " + singleDayDesc + ", " + singleDayHi + ", " + singleDayLow + ", " + singleDayWind);
 
                     // Add to MatrixCursor
-                    result.addRow(new Object[] {index, fiveDayDesc, fiveDayTemp});
+                    result.addRow(new Object[] {index, singleDayDate, singleDayDesc, singleDayHi, singleDayLow, singleDayWind});
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -209,9 +236,9 @@ public class WeatherContentProvider extends ContentProvider {
                 default:
                     Log.e("QUERY", "INVALID URI = " + uri.toString());
         }
-
         return result;
     }
+
 
     /* (non-Javadoc)
      * @see android.content.ContentProvider#update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[])
