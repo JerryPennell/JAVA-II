@@ -10,20 +10,20 @@
 package com.jpennell.weathercast;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockActivity;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-
+import com.jpennell.library.DetailFragment;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class DetailsActivity.
  */
-public class DetailsActivity extends SherlockActivity {
+public class DetailsActivity extends SherlockFragmentActivity {
 
     /** The date. */
     String date;
@@ -46,28 +46,30 @@ public class DetailsActivity extends SherlockActivity {
 
             Log.i("DETAIL STRINGS", date + ", " + desc + ", " + hi + ", " + low + ", " + wind);
 
-            // Set layout elements
-            ((TextView) findViewById(R.id.detailDate)).setText(date);
-            ((TextView) findViewById(R.id.detailDesc)).setText(desc);
-            ((TextView) findViewById(R.id.low_description)).setText(low);
-            ((TextView) findViewById(R.id.hi_description)).setText(hi);
-            ((TextView) findViewById(R.id.wind_description)).setText(wind);
+
+            DetailFragment fragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail_frag);
+            fragment.displayDetails(date, desc, low, hi, wind);
         }
     }
 
 
     /* (non-Javadoc)
-     * @see android.app.Activity#onCreate(android.os.Bundle)
+     * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Set Content
-        setContentView(R.layout.details);
+        setContentView(R.layout.detail_frag);
 
         // ActionBarSherlock
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            finish();
+            return;
+        }
 
         // Call getData method
         getData();
@@ -76,18 +78,16 @@ public class DetailsActivity extends SherlockActivity {
 
 
     /* (non-Javadoc)
-     * @see com.actionbarsherlock.app.SherlockActivity#onCreateOptionsMenu(android.view.Menu)
+     * @see com.actionbarsherlock.app.SherlockFragmentActivity#onCreateOptionsMenu(android.view.Menu)
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportMenuInflater().inflate(R.menu.main, menu);
-
-        menu.add("Web").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
 
+
     /* (non-Javadoc)
-     * @see com.actionbarsherlock.app.SherlockActivity#onOptionsItemSelected(android.view.MenuItem)
+     * @see com.actionbarsherlock.app.SherlockFragmentActivity#onOptionsItemSelected(android.view.MenuItem)
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -102,14 +102,6 @@ public class DetailsActivity extends SherlockActivity {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                return true;
-
-            case 0:
-                Log.i("ACTION BAR", "Web navigation pressed");
-
-                Intent implicitIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.worldweatheronline.com"));
-                
-                startActivity(implicitIntent);
                 return true;
 
             default:
