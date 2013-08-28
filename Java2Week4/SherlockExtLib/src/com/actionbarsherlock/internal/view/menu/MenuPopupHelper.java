@@ -104,7 +104,8 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
         }
     }
 
-    public boolean tryShow() {
+    @SuppressWarnings("deprecation")
+	public boolean tryShow() {
         mPopup = new IcsListPopupWindow(mContext, null, R.attr.popupMenuStyle);
         mPopup.setOnDismissListener(this);
         mPopup.setOnItemClickListener(this);
@@ -147,7 +148,8 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
         }
     }
 
-    public void onDismiss() {
+    @SuppressWarnings("deprecation")
+	public void onDismiss() {
         mPopup = null;
         mMenu.close();
         if (mTreeObserver != null) {

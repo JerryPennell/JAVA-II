@@ -29,6 +29,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -300,6 +301,10 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
 
         // Start Intent
         startService(intent);
+        
+        //Close out Keyboard
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    	imm.hideSoftInputFromWindow(field.getWindowToken(), 0);
     }
 
 
