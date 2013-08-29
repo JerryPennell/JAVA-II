@@ -51,6 +51,7 @@
                 android:layout_width="0dip"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
                 android:layout_gravity="left"
                 android:textSize="36sp"/>
     </LinearLayout>
@@ -64,10 +65,10 @@
             android:padding="15dip"/>
 
     <TextView
-            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+             android:textColor="@android:color/widget_edittext_dark"
             android:textSize="14sp"
             android:text="@string/info_disclosure"/>
 

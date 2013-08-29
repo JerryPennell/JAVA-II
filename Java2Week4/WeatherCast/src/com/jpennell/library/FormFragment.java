@@ -110,7 +110,7 @@ public class FormFragment extends SherlockFragment {
             }
         });
 
-//      // Attach list adapter
+        // Attach list adapter
         ListView listView = (ListView) view.findViewById(R.id.list);
 
 
