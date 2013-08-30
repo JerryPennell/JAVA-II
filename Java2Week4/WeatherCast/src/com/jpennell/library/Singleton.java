@@ -10,9 +10,8 @@
 package com.jpennell.library;
 
 import android.content.Context;
-import android.content.Intent;
 
-public class Singleton extends Intent{
+public class Singleton {
 	private static Singleton mInstance = null;
  
 	private Context _context;

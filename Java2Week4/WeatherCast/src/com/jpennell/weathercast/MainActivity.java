@@ -44,6 +44,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.jpennell.library.DetailFragment;
 import com.jpennell.library.FileSystem;
 import com.jpennell.library.FormFragment;
+import com.jpennell.library.Singleton;
 import com.jpennell.library.StorageParser;
 import com.jpennell.library.WeatherContentProvider;
 import com.jpennell.library.Web;
@@ -72,19 +73,23 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
      * Handle service connection.
      */
     public void handleServiceConnection() {
+    	
+    	
+    	Singleton.getInstance().setContext(this);
+    	
         Button searchButton = (Button) findViewById(R.id.searchButton);
 
         // Detect Network Connection
-        _isConnected = Web.getConnectionStatus(_context);
+        _isConnected = Web.getConnectionStatus(Singleton.getInstance().getContext());
         if (_isConnected) {
-            Log.i("NETWORK CONNECTION", Web.getConnectionType(_context));
+            Log.i("NETWORK CONNECTION", Web.getConnectionType(Singleton.getInstance().getContext()));
 
             // Enable button
             searchButton.setClickable(true);
 
         } else {
             // Alert if not connected
-            AlertDialog.Builder alert = new AlertDialog.Builder(_context);
+            AlertDialog.Builder alert = new AlertDialog.Builder(Singleton.getInstance().getContext());
             alert.setTitle("No Network Connection");
             alert.setMessage("Please check your network connections and try again.");
             alert.setCancelable(false);
@@ -106,8 +111,11 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
      * Display current.
      */
     public void displayCurrent() {
+    	
+    	Singleton.getInstance().setContext(this);
+    	
         // Display current condition via parsing stored json string
-        String readStorage = FileSystem.readStringFile(_context, "temp", false);
+        String readStorage = FileSystem.readStringFile(Singleton.getInstance().getContext(), "temp", false);
 
         JSONObject json;
         JSONObject data;
@@ -141,6 +149,8 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
     public void displayFiveDay(Cursor cursor) {
         // Display weather data via the content provider
         ArrayList<HashMap<String, String>> dataList = new ArrayList<HashMap<String, String>>();
+        
+        Singleton.getInstance().setContext(this);
 
         cursor.moveToFirst();
 
@@ -160,7 +170,7 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
                 dataList.add(displayMap);
             }
         }
-        SimpleAdapter adapter = new SimpleAdapter(_context, dataList, R.layout.list_row, new String[] {"desc", "hi", "low"}, new int[] {R.id.desc, R.id.tempLow, R.id.tempHi});
+        SimpleAdapter adapter = new SimpleAdapter(Singleton.getInstance().getContext(), dataList, R.layout.list_row, new String[] {"desc", "hi", "low"}, new int[] {R.id.desc, R.id.tempLow, R.id.tempHi});
 
         // Set adapter to listView
         _listView.setAdapter(adapter);
@@ -178,9 +188,6 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
         _listView = (ListView) this.findViewById(R.id.list);
         View listHeader = this.getLayoutInflater().inflate(R.layout.list_header, null);
         _listView.addHeaderView(listHeader);
-
-        // Call createLayout method
-        //createLayout();
 
         // Call handleServiceConnection method
         handleServiceConnection();
@@ -227,6 +234,8 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	Singleton.getInstance().setContext(this);
+    	
         // Check which request we're responding to
         if (requestCode == DAY_PICKED_REQUEST) {
             // Make sure the request was successful
@@ -235,7 +244,7 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
                 if (result != null) {
                     String date = result.getString("date");
 
-                    Toast toast = Toast.makeText(_context, "You checked the weather for " + date, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(Singleton.getInstance().getContext(), "You checked the weather for " + date, Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
@@ -250,6 +259,7 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
     @SuppressLint("HandlerLeak")
 	@Override
     public void onWeatherSearch() {
+    	Singleton.getInstance().setContext(this);
         final EditText field = (EditText) findViewById(R.id.searchField);
         Log.i("CLICK HANDLER", field.getText().toString());
 
@@ -267,14 +277,14 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
                         Boolean error = data.has("error");
                         if (error) {
                             // Create toast (popup)
-                            Toast toast = Toast.makeText(_context,"Invalid location", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(Singleton.getInstance().getContext(),"Invalid location", Toast.LENGTH_SHORT);
                             toast.show();
                         } else {
                             // Get JSON data to determine correct zip code
                             String request = data.getJSONArray("request").getJSONObject(0).getString("query");
 
                             // Create toast (popup)
-                            Toast toast = Toast.makeText(_context,"Valid location, " + request, Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(Singleton.getInstance().getContext(),"Valid location, " + request, Toast.LENGTH_SHORT);
                             toast.show();
 
                             // Query content provider
@@ -295,7 +305,7 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
         // Create Messenger Class
         Messenger myMessenger = new Messenger(myHandler);
 
-        Intent intent = new Intent(_context,WeatherService.class);
+        Intent intent = new Intent(Singleton.getInstance().getContext(),WeatherService.class);
         intent.putExtra("messenger", myMessenger);
         intent.putExtra("zip", field.getText().toString());
 
@@ -314,11 +324,12 @@ public class MainActivity extends SherlockFragmentActivity implements FormFragme
     @SuppressWarnings("unchecked")
 	@Override
     public void onSingleDaySelected(Integer i) {
+    	Singleton.getInstance().setContext(this);
         Log.i("ROW CLICKED", "Row " + i + " clicked");
 
         HashMap<String, String> detailMap = (HashMap<String, String>) _listView.getItemAtPosition(i);
 
-        Intent detailIntent = new Intent(_context, DetailsActivity.class);
+        Intent detailIntent = new Intent(Singleton.getInstance().getContext(), DetailsActivity.class);
 
         String date = null;
         String desc = null;
